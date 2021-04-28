@@ -1,0 +1,153 @@
+specVersion: 0.0.2
+description: PRIVI's NFT Assets
+repository: https://github.com/Cache2020/PRIVIweb
+schema:
+  file: ./schema.graphql
+dataSources:
+  # ---------------------------------------------------------
+  # PRIVIPodERC721Factory -------------------------------------
+  # ---------------------------------------------------------
+  - kind: ethereum/contract
+    name: PRIVIPodERC721Factory
+    network: ropsten
+    source:
+      address: '0x3862aF9A3186Fe3b33bbb60A44199f7b805A404B'
+      abi: PRIVIPodERC721Factory
+      startBlock: 10056449
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/pod721.ts
+      entities:
+        - PRIVIPod721
+        - Account
+      abis:
+        - name: PRIVIPodERC721Factory
+          file: ./abis/PRIVIPodERC721Factory.json
+      eventHandlers:
+        - event: PodCreated(indexed string,string,string)
+          handler: handlePodCreated
+
+  # ---------------------------------------------------------
+  # PRIVIPodERC721RoyaltyFactory ----------------------------
+  # ---------------------------------------------------------
+  - kind: ethereum/contract
+    name: PRIVIPodERC721RoyaltyFactory
+    network: ropsten
+    source:
+      address: '0x6148Ef55AB2bd10Cfb82A0922a9f4760988e3f84'
+      abi: PRIVIPodERC721RoyaltyFactory
+      startBlock: 10083563
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/pod721.ts
+      entities:
+        - PRIVIPod721
+        - Account
+      abis:
+        - name: PRIVIPodERC721RoyaltyFactory
+          file: ./abis/PRIVIPodERC721RoyaltyFactory.json
+      eventHandlers:
+        - event: PodCreated(indexed string,string,string)
+          handler: handlePodCreated
+
+  # ---------------------------------------------------------
+  # PRIVIPodERC1155Factory ----------------------------------
+  # ---------------------------------------------------------
+  - kind: ethereum/contract
+    name: PRIVIPodERC1155Factory
+    network: ropsten
+    source:
+      address: '0xE71021c2f1FB06B46Ac0e24EfeBF5A63815e76D6'
+      abi: PRIVIPodERC1155Factory
+      startBlock: 10083601
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/pod1155.ts
+      entities:
+        - PRIVIPod1155
+        - Account
+      abis:
+        - name: PRIVIPodERC1155Factory
+          file: ./abis/PRIVIPodERC1155Factory.json
+      eventHandlers:
+        - event: PodCreated(indexed string,address)
+          handler: handlePodCreated
+
+  # ---------------------------------------------------------
+  # PRIVIPodERC1155RoyaltyFactory ---------------------------
+  # ---------------------------------------------------------
+  - kind: ethereum/contract
+    name: PRIVIPodERC1155RoyaltyFactory
+    network: ropsten
+    source:
+      address: '0x7e22A2442CC31bd9b695425e301F8D1616bD68f8'
+      abi: PRIVIPodERC1155RoyaltyFactory
+      startBlock: 10083605
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/pod1155.ts
+      entities:
+        - PRIVIPod1155
+        - Account
+      abis:
+        - name: PRIVIPodERC1155RoyaltyFactory
+          file: ./abis/PRIVIPodERC1155RoyaltyFactory.json
+      eventHandlers:
+        - event: PodCreated(indexed string,address)
+          handler: handlePodCreated
+
+# ---------------------------------------------------------
+# TEMPLATES -----------------------------------------------
+# ---------------------------------------------------------
+templates:
+  - name: PRIVIPodERC721Token
+    kind: ethereum/contract
+    network: ropsten
+    source:
+      abi: ERC721
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/pod721.ts
+      entities:
+        - PRIVIPod721
+        - NFT
+        - Account
+      abis:
+        - name: ERC721
+          file: ./abis/ERC721.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+
+  - name: PRIVIPodERC1155Token
+    kind: ethereum/contract
+    network: ropsten
+    source:
+      abi: ERC1155
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/pod1155.ts
+      entities:
+        - PRIVIPod1155
+        - NFT
+        - Account
+      abis:
+        - name: ERC1155
+          file: ./abis/ERC1155.json
+      eventHandlers:
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch

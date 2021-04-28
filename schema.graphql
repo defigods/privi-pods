@@ -1,0 +1,33 @@
+type NFT @entity {
+  id: ID!
+
+  tokenId: BigInt!
+  tokenURI: String!
+
+  account: Account!
+}
+
+type Account @entity {
+  id: ID!
+
+  address: Bytes!
+  nfts: [NFT]! @derivedFrom(field: "account")
+}
+
+type PRIVIPod721 @entity {
+  id: ID!
+
+  address: Bytes!
+
+  podId: String!
+  name: String
+  symbol: String
+}
+
+type PRIVIPod1155 @entity {
+  id: ID!
+
+  address: Bytes!
+
+  uri: String!
+}
